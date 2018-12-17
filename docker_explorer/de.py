@@ -110,7 +110,10 @@ class DockerExplorer(object):
         help='Shows an abridged history of changes for a container')
     history_parser.add_argument(
         'container_id',
-        help='The container id (can be the first few characters of the id)')
+        help=(
+            'The container id (can be the first few characters of the id). If '
+            'empty, lists history for all containers')
+        )
     history_parser.add_argument(
         '--show-empty', help='Show empty layers (disabled by default)',
         action='store_true')
@@ -278,8 +281,16 @@ class DockerExplorer(object):
       container_id (str): the ID of the container.
       show_empty_layers (bool): whether to display empty layers.
     """
-    container_object = self.GetContainer(container_id)
-    print(utils.PrettyPrintJSON(container_object.GetHistory(show_empty_layers)))
+    container_list = []
+    if container_id:
+      container_list = [self.GetContainer(container_id)]
+    else:
+      container_list = self.GetContainersList()
+
+    for container_object in container_list:
+      print(
+          utils.PrettyPrintJSON(container_object.GetHistory(show_empty_layers)))
+
 
   def GetRepositoriesString(self):
     """Returns information about images in the local Docker repositories.
