@@ -22,6 +22,7 @@ setup(
     author='Docker-Explorer devs',
     license='Apache License, Version 2.0',
     packages=find_packages(exclude=['tests', 'tools']),
+    python_requires='>=3.6',
     install_requires=[
         'requests',
     ],
